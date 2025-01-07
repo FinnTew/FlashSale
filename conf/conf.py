@@ -19,9 +19,10 @@ class MySQLConfig:
 
 
 class RedisConfig:
-    def __init__(self, host, port):
+    def __init__(self, host, port, db):
         self.host = host
         self.port = port
+        self.db = db
 
 
 class RabbitMQConfig:
