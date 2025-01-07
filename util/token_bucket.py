@@ -237,7 +237,7 @@ class MultiLevelRateLimiter:
 
 multi_limiter = MultiLevelRateLimiter()
 
-for limiter in conf.limiters.limiters:
+for limiter in conf.limiters:
     multi_limiter.add_limiter(
         rate=limiter.rate,
         capacity=limiter.capacity,
