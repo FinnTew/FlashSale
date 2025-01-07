@@ -3,6 +3,17 @@ flask:
   port: 5000
   debug: true
 
+limiters:
+  - namespace: app_level
+    rate: 100
+    cap: 200
+  - namespace: service_level
+    rate: 1000
+    cap: 2000
+  - namespace: user_level
+    rate: 10
+    cap: 20
+
 database:
   mysql:
     host: localhost

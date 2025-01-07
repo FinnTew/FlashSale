@@ -1,3 +1,5 @@
+from typing import List
+
 import yaml
 import os
 
@@ -7,6 +9,13 @@ class FlaskConfig:
         self.host = host
         self.port = port
         self.debug = debug
+
+
+class LimiterConfig:
+    def __init__(self, namespace, rate, cap):
+        self.namespace = namespace
+        self.rate = rate
+        self.cap = cap
 
 
 class MySQLConfig:
@@ -48,6 +57,7 @@ class Conf:
             config_data = yaml.safe_load(file)
 
         self.flask = FlaskConfig(**config_data['flask'])
+        self.limiters = [LimiterConfig(**limiter_config) for limiter_config in config_data['limiters']]
         self.mysql = MySQLConfig(**config_data['database']['mysql'])
         self.redis = RedisConfig(**config_data['database']['redis'])
         self.rabbitmq = RabbitMQConfig(**config_data['messaging']['rabbitmq'])
