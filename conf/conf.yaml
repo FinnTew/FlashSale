@@ -1,0 +1,23 @@
+flask:
+  host: 0.0.0.0
+  port: 5000
+  debug: true
+
+database:
+  mysql:
+    host: localhost
+    port: 3306
+    user: finntew
+    password: ft123456
+    database: flash_sale
+
+  redis:
+    host: localhost
+    port: 6379
+
+messaging:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    user: finntew
+    password: ft123456
