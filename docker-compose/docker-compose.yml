@@ -9,8 +9,7 @@ services:
       MYSQL_PASSWORD: finn123456
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init_mysql.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
 
