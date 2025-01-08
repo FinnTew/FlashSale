@@ -7,3 +7,4 @@ class Users(BaseModel):
     password_hash = CharField()
     email = CharField(unique=True)
     created_at = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+
