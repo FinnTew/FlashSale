@@ -1,7 +1,8 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS
 from conf.conf import conf
-
 
 app = Flask(__name__)
 CORS(app)
@@ -14,7 +15,7 @@ def ping():
     print("success")
     return 'pong'
 
-def main():
+def flask_app():
     app.run(
         host=conf.flask.host,
         port=conf.flask.port,
@@ -22,4 +23,4 @@ def main():
     )
 
 if __name__ == '__main__':
-    main()
+    flask_app()
