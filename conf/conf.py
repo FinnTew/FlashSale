@@ -1,7 +1,6 @@
-from typing import List
+import os
 
 import yaml
-import os
 
 
 class FlaskConfig:
@@ -28,10 +27,11 @@ class MySQLConfig:
 
 
 class RedisConfig:
-    def __init__(self, host, port, db):
+    def __init__(self, host, port, db, password):
         self.host = host
         self.port = port
         self.db = db
+        self.password = password
 
 
 class RabbitMQConfig:
