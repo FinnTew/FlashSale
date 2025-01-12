@@ -14,7 +14,7 @@ class JWTRedis:
             redis_db: int = conf.redis.db,
             secret_key: str = 'finntew',
             algorithm: str = 'HS256',
-            token_prefix: str = 'token:'
+            token_prefix: str = 'jwt_token:'
     ):
         """
         初始化JWT Redis工具类

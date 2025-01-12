@@ -1,0 +1,9 @@
+### 登陆
+
+POST http://localhost:5000/user/login
+Content-Type: application/json
+
+{
+    "username": "finntew",
+    "password": "ft123456"
+}

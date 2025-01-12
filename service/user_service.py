@@ -27,14 +27,14 @@ class UserService:
             return False
         return PasswordUtil.check_password(password, user.password_hash)
 
-    def get_user_by_username(self, username: str):
-        return self.user.get_or_none(Users.username == username)
+    def get_user_by_username(self, username: str) -> Users:
+        return self.user.select().where(Users.username == username).first()
 
-    def get_user_by_user_id(self, user_id: int):
-        return self.user.get_or_none(Users.user_id == user_id)
+    def get_user_by_user_id(self, user_id: int) -> Users:
+        return self.user.select().where(Users.user_id == user_id).first()
 
-    def get_user_by_email(self, email: str):
-        return self.user.get_or_none(Users.email == email)
+    def get_user_by_email(self, email: str) -> Users:
+        return self.user.select().where(Users.email == email).first()
 
     def update_password(self, user_id: int, old_password: str, new_password: str) -> bool:
         user = self.get_user_by_user_id(user_id)
