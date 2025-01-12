@@ -23,7 +23,11 @@ class UserController:
         v = Validator({
             'username': {'type': 'string', 'minlength': 6, 'required': True},
             'password': {'type': 'string', 'minlength': 8, 'required': True},
-            'email': {'type': 'string', 'minlength': 4, 'required': True}
+            'email': {
+                'type': 'string',
+                'regex': r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                'required': True
+            }
         })
         if not v.validate(json_data):
             return ResponseUtil.error(message=v.errors)
@@ -91,38 +95,18 @@ class UserController:
         json_data = request.get_json()
 
         v = Validator({
-            'username': {'type': 'string', 'minlength': 8, 'required': True},
-            'old_password': {'type': 'string', 'minlength': 8, 'required': True},
-            'new_password': {'type': 'string', 'minlength': 8, 'required': True}
+            'username': {'type': 'string', 'minlength': 6, 'required': True},
+            'new_password': {'type': 'string', 'minlength': 8, 'required': True},
         })
         if not v.validate(json_data):
             return ResponseUtil.error(message=v.errors)
 
-        if self.user_service.get_user_by_username(json_data['username']):
+        user = self.user_service.get_user_by_username(json_data['username'])
+        if user is None:
             return ResponseUtil.error(message='Username does not exist')
+        user_email = user.email
 
-        if self.user_service.update_password(json_data['username'], json_data['old_password'], json_data['new_password']):
-            return ResponseUtil.success(message='Password updated')
+        # TODO: use the rabbitmq to implement email sending and verification,
+        #       if verify success, then update the password
 
-        return ResponseUtil.error(message='Password update failed: unknown error')
-
-    def reset_email(self):
-        json_data = request.get_json()
-
-        v = Validator({
-            'username': {'type': 'string', 'minlength': 8, 'required': True},
-            'old_email': {'type': 'string', 'minlength': 4, 'required': True},
-            'new_email': {'type': 'string', 'minlength': 4, 'required': True}
-        })
-        if not v.validate(json_data):
-            return ResponseUtil.error(message=v.errors)
-
-        if self.user_service.get_user_by_username(json_data['username']):
-            return ResponseUtil.error(message='Username does not exist')
-
-        # TODO: check old email.
-
-        if self.user_service.update_email(json_data['username'], json_data['new_email']):
-            return ResponseUtil.success(message='Email updated')
-
-        return ResponseUtil.error(message='Email update failed: unknown error')
+        return ResponseUtil.success(message='Password reset success')

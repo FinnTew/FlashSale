@@ -7,3 +7,14 @@ Content-Type: application/json
     "username": "finntew",
     "password": "ft123456"
 }
+
+### 注册
+
+POST http://localhost:5000/user/register
+Content-Type: application/json
+
+{
+    "username": "nanomoa",
+    "password": "nano114514",
+    "email": "nanomoa76@gmail.com"
+}
