@@ -42,6 +42,15 @@ class RabbitMQConfig:
         self.password = password
 
 
+class EmailConfig:
+    def __init__(self, host, port, username, password, use_tls):
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = password
+        self.use_tls = use_tls
+
+
 class Conf:
     _instance = None
 
@@ -61,6 +70,7 @@ class Conf:
         self.mysql = MySQLConfig(**config_data['database']['mysql'])
         self.redis = RedisConfig(**config_data['database']['redis'])
         self.rabbitmq = RabbitMQConfig(**config_data['messaging']['rabbitmq'])
+        self.email = EmailConfig(**config_data['email'])
 
 
 conf = Conf()

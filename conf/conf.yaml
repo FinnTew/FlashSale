@@ -34,3 +34,10 @@ messaging:
     port: 5672
     user: finntew
     password: ft123456
+
+email:
+  host: smtp.qq.com
+  port: 587
+  username: 25569983@qq.com
+  password: nqucyldbfbaycaeg
+  use_tls: true
