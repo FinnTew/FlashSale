@@ -1,8 +1,9 @@
-from service.user_service import UserService
-from flask import Blueprint, request, jsonify
 from cerberus import Validator
-from util.jwt_redis import JWTRedis
+from flask import Blueprint, request
 
+from service.user_service import UserService
+from util.email_verify_util import EmailVerifyUtil
+from util.jwt_redis import JWTRedis
 from util.response_util import ResponseUtil
 
 
@@ -16,6 +17,8 @@ class UserController:
     def setup_routes(self):
         self.user_bp.add_url_rule('/register', 'register', self.register, methods=['POST'])
         self.user_bp.add_url_rule('/login', 'login', self.login, methods=['POST'])
+        self.user_bp.add_url_rule('/send_verify_code', 'send_verify_code', self.send_verify_code, methods=['POST'])
+        self.user_bp.add_url_rule('/reset_password', 'reset_password', self.reset_password, methods=['POST'])
 
     def register(self):
         json_data = request.get_json()
@@ -91,12 +94,11 @@ class UserController:
 
         return ResponseUtil.error(message='Login failed: invalid password')
 
-    def reset_password(self):
+    def send_verify_code(self):
         json_data = request.get_json()
 
         v = Validator({
             'username': {'type': 'string', 'minlength': 6, 'required': True},
-            'new_password': {'type': 'string', 'minlength': 8, 'required': True},
         })
         if not v.validate(json_data):
             return ResponseUtil.error(message=v.errors)
@@ -106,7 +108,35 @@ class UserController:
             return ResponseUtil.error(message='Username does not exist')
         user_email = user.email
 
-        # TODO: use the rabbitmq to implement email sending and verification,
-        #       if verify success, then update the password
+        email_verify_util = EmailVerifyUtil()
+        email_verify_util.send_verify_code(user_email)
 
-        return ResponseUtil.success(message='Password reset success')
+        return ResponseUtil.success(message='Verification code sent')
+
+    def reset_password(self):
+        json_data = request.get_json()
+
+        v = Validator({
+            'username': {'type': 'string', 'minlength': 6, 'required': True},
+            'new_password': {'type': 'string', 'minlength': 8, 'required': True},
+            'verify_code': {'type': 'string', 'minlength': 6, 'required': True}
+        })
+        if not v.validate(json_data):
+            return ResponseUtil.error(message=v.errors)
+
+        user = self.user_service.get_user_by_username(json_data['username'])
+        if user is None:
+            return ResponseUtil.error(message='Username does not exist')
+        user_email = user.email
+
+        email_verify_util = EmailVerifyUtil()
+        verify_success = email_verify_util.verify(user_email, json_data['verify_code'])
+
+        if not verify_success:
+            return ResponseUtil.error(message='Invalid verification code')
+
+        new_password = json_data['new_password']
+        if self.user_service.update_password(user.user_id, new_password):
+            return ResponseUtil.success(message='Password reset success')
+
+        return ResponseUtil.error(message='Password reset failed: unknown error')
