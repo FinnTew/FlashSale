@@ -51,7 +51,7 @@ class EmailVerifyUtil:
         saved_code = self.redis.get(self._get_redis_key(recipient_email))
         if saved_code is None:
             return False
-        if code == saved_code:
+        if code == saved_code.decode():
             self.redis.delete(self._get_redis_key(recipient_email))
             return True
 
