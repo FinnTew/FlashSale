@@ -35,6 +35,9 @@ class ProductService:
     def get_product_by_id(self, product_id: int):
         return self.product.select().where(Products.product_id == product_id).first()
 
+    def get_product_by_name(self, name: str):
+        return self.product.select().where(Products.name == name).first()
+
     def get_all_products(self):
         return self.product.select()
 

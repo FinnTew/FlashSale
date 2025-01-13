@@ -4,6 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from conf.conf import conf
+from controller.product_controller import ProductController
 from controller.user_controller import UserController
 from util.email_verify_util import EmailVerifyUtil
 
@@ -20,6 +21,7 @@ def ping():
 
 def init_controller():
     app.register_blueprint(UserController().user_bp, url_prefix='/user')
+    app.register_blueprint(ProductController().product_bp, url_prefix='/product')
 
 def flask_app():
     init_controller()
