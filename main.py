@@ -1,12 +1,10 @@
-import os
-import random
+from multiprocessing import Process
 
 from flask import Flask
 from flask_cors import CORS
+
 from conf.conf import conf
 from controller.user_controller import UserController
-from model.user_model import Users
-from service.user_service import UserService
 from util.email_verify_util import EmailVerifyUtil
 
 app = Flask(__name__)
@@ -31,5 +29,10 @@ def flask_app():
         debug=conf.flask.debug
     )
 
+def email_verify_consumer():
+    process = Process(target=EmailVerifyUtil().email_consumer)
+    process.start()
+
 if __name__ == '__main__':
+    email_verify_consumer()
     flask_app()
