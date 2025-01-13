@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
     "username": "finntew",
-    "password": "ft123456"
+    "password": "12345678"
 }
 
 ### 注册
@@ -17,4 +17,24 @@ Content-Type: application/json
     "username": "nanomoa",
     "password": "nano114514",
     "email": "nanomoa76@gmail.com"
+}
+
+### 发送验证码
+
+POST http://localhost:5000/user/send_verify_code
+Content-Type: application/json
+
+{
+  "username": "finntew"
+}
+
+### 验证验证码
+
+POST http://localhost:5000/user/reset_password
+Content-Type: application/json
+
+{
+  "username": "finntew",
+  "verify_code": "733660",
+  "new_password": "12345678"
 }
