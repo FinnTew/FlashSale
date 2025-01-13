@@ -38,3 +38,15 @@ Content-Type: application/json
   "verify_code": "733660",
   "new_password": "12345678"
 }
+
+### 新建商品
+
+POST http://localhost:5000/product/create
+Content-Type: application/json
+
+{
+  "name": "test",
+  "description": "测试商品",
+  "price": 9.99,
+  "stock": 100
+}

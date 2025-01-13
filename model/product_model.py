@@ -1,5 +1,5 @@
 from peewee import AutoField, CharField, DecimalField, IntegerField, TextField, DateTimeField, SQL
-from base_model import BaseModel
+from model.base_model import BaseModel
 
 class Products(BaseModel):
     product_id = AutoField()
