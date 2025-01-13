@@ -36,11 +36,9 @@ class UserService:
     def get_user_by_email(self, email: str) -> Users:
         return self.user.select().where(Users.email == email).first()
 
-    def update_password(self, user_id: int, old_password: str, new_password: str) -> bool:
+    def update_password(self, user_id: int, new_password: str) -> bool:
         user = self.get_user_by_user_id(user_id)
         if user is None:
-            return False
-        if not PasswordUtil.check_password(old_password, user.password_hash):
             return False
 
         new_password_hash = PasswordUtil.hash_password(new_password)
