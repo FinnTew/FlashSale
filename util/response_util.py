@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify
 
 class ResponseUtil:
@@ -17,4 +19,4 @@ class ResponseUtil:
             "message": message,
             "data": data
         }
-        return jsonify(response), status_code
+        return json.dumps(response, ensure_ascii=False), status_code

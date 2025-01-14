@@ -1,3 +1,5 @@
+from typing import List
+
 from model.product_model import Products
 import logging
 
@@ -32,13 +34,13 @@ class ProductService:
             logger.error(f"更新商品失败: {str(e)}")
             return False
 
-    def get_product_by_id(self, product_id: int):
+    def get_product_by_id(self, product_id: int) -> Products:
         return self.product.select().where(Products.product_id == product_id).first()
 
-    def get_product_by_name(self, name: str):
+    def get_product_by_name(self, name: str) -> Products:
         return self.product.select().where(Products.name == name).first()
 
-    def get_all_products(self):
+    def get_all_products(self) -> List[Products]:
         return self.product.select()
 
     def delete_product(self, product_id: int) -> bool:
