@@ -1,7 +1,13 @@
+import base64
+import hashlib
+import re
+import time
+from datetime import datetime
 from multiprocessing import Process
 
 from flask import Flask
 from flask_cors import CORS
+from peewee import MySQLDatabase
 
 from conf.conf import conf
 from controller.product_controller import ProductController
@@ -36,5 +42,18 @@ def email_verify_consumer():
     process.start()
 
 if __name__ == '__main__':
-    email_verify_consumer()
-    flask_app()
+    # email_verify_consumer()
+    # flask_app()
+    order_str = "order:2:1:3"
+    hash_obj = hashlib.sha256(order_str.encode())
+    hash_hex = hash_obj.hexdigest()
+    hash_base64 = (base64.urlsafe_b64encode(hash_obj.digest())
+                   .decode()
+                   .rstrip('='))
+    order_pre = re.sub(r'[^a-zA-Z0-9]', '', hash_base64)
+    now = datetime.now()
+    timestamp_str = now.strftime('%Y%m%d%H%M%S') + f"{now.microsecond // 1000:03d}"
+    print(f"FS{order_pre[2:10]}-{timestamp_str}")
+    print(hash_base64)
+
+

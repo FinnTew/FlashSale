@@ -1,5 +1,6 @@
 from typing import List
 
+from model.base_model import db
 from model.product_model import Products
 import logging
 
@@ -58,9 +59,10 @@ class ProductService:
         if product.stock < amount:
             return False
         try:
-            self.product.update(
-                stock=Products.stock - amount
-            ).where(Products.product_id == product_id).execute()
+            with db.atomic():
+                self.product.update(
+                    stock=Products.stock - amount
+                ).where(Products.product_id == product_id).execute()
             return True
         except Exception as e:
             logger.error(f"减少库存失败: {str(e)}")
@@ -68,9 +70,10 @@ class ProductService:
 
     def increase_stock(self, product_id: int, amount: int) -> bool:
         try:
-            self.product.update(
-                stock=Products.stock + amount
-            ).where(Products.product_id == product_id).execute()
+            with db.atomic():
+                self.product.update(
+                    stock=Products.stock + amount
+                ).where(Products.product_id == product_id).execute()
             return True
         except Exception as e:
             logger.error(f"增加库存失败: {str(e)}")
